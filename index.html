@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión VIFOMIPYMES - Diagramas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            margin: 5px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #555;
+        }
+
+        .nav-tab:hover {
+            background: rgba(103, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .diagram-container {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .diagram-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .diagram-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .use-case-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .actor {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .actor-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .actor-name {
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .use-case {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .use-case:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .use-case h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .use-case p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .conceptual-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .concept {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .concept:hover {
+            transform: scale(1.05);
+        }
+
+        .concept h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .concept-details {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .requirement-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-top: 4px solid #667eea;
+        }
+
+        .requirement-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .requirement-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #28a745;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .requirement-item h4 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .requirement-item p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .sequence-diagram {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+
+        .sequence-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .sequence-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .step-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .er-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .entity {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .entity h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .entity-attributes {
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .architecture-diagram {
+            display: grid;
+            grid-template-rows: auto auto auto;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .architecture-layer {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .architecture-layer h4 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .layer-components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .component {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .component:hover {
+            transform: translateY(-3px);
+        }
+
+        .component h5 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .component p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .flow-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .flow-content h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .flow-content p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: #667eea;
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .requirements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-tab {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sistema de Gestión VIFOMIPYMES</h1>
+            <p>Propuesta de Diseño de Sistema de Gestión para el Viceministerio de Fomento a las MIPYMES - Diagramas Técnicos y Conceptuales</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showDiagram('use-cases')">Casos de Uso</button>
+            <button class="nav-tab" onclick="showDiagram('conceptual-map')">Mapa Conceptual</button>
+            <button class="nav-tab" onclick="showDiagram('requirements')">Requisitos</button>
+            <button class="nav-tab" onclick="showDiagram('sequence')">Diagramas de Secuencia</button>
+            <button class="nav-tab" onclick="showDiagram('flowchart')">Diagrama de Flujo</button>
+            <button class="nav-tab" onclick="showDiagram('er-diagram')">Modelo E/R</button>
+            <button class="nav-tab" onclick="showDiagram('infrastructure')">Infraestructura</button>
+            <button class="nav-tab" onclick="showDiagram('architecture')">Arquitectura</button>
+        </div>
+
+        <!-- Casos de Uso -->
+        <div id="use-cases" class="diagram-container active">
+            <h2 class="diagram-title">Diagrama de Casos de Uso</h2>
+            
+            <div class="use-case-diagram">
+                <div class="actor">
+                    <div class="actor-icon">👤</div>
+                    <div class="actor-name">Empresario MIPYME</div>
+                </div>
+                
+                <div class="actor">
+                    <div class="actor-icon">🏢</div>
+                    <div class="actor-name">Funcionario VIFOMIPYMES</div>
+                </div>
+                
+                <div class="actor">
+                    <div class="actor-icon">📊</div>
+                    <div class="actor-name">Administrador del Sistema</div>
+                </div>
+                
+                <div class="actor">
+                    <div class="actor-icon">🤖</div>
+                    <div class="actor-name">Sistema de IA</div>
+                </div>
+            </div>
+
+            <div class="use-cases">
+                <div class="use-case">
+                    <h4>Registrar MIPYME</h4>
+                    <p>Permite al empresario registrar su empresa en el sistema con validación automática de datos.</p>
+                </div>
+                
+                <div class="use-case">
+                    <h4>Consultar Asesoría Virtual</h4>
+                    <p>Acceso a chatbot con IA para resolver consultas frecuentes y recibir orientación básica.</p>
+                </div>
+                
+                <div class="use-case">
+                    <h4>Actualizar Información Empresarial</h4>
+                    <p>Modificación de datos empresariales con seguimiento de cambios y validación.</p>
+                </div>
+                
+                <div class="use-case">
+                    <h4>Gestionar Expedientes</h4>
+                    <p>Funcionarios pueden crear, consultar y actualizar expedientes de MIPYMES.</p>
+                </div>
+                
+                <div class="use-case">
+                    <h4>Generar Reportes Estadísticos</h4>
+                    <p>Creación de dashboards y reportes analíticos sobre el ecosistema MIPYME.</p>
+                </div>
+                
+                <div class="use-case">
+                    <h4>Visualizar Mapa de MIPYMES</h4>
+                    <p>Consulta geoespacial de distribución de empresas por territorio y sector.</p>
+                </div>
+                
+                <div class="use-case">
+                    <h4>Clasificar y Evaluar MIPYMES</h4>
+                    <p>Sistema de IA clasifica empresas según criterios de madurez y necesidades.</p>
+                </div>
+                
+                <div class="use-case">
+                    <h4>Integrar con Sistemas Externos</h4>
+                    <p>Intercambio de datos con DGII, TSS, ONAPI y otras plataformas estatales.</p>
+                </div>
+                
+                <div class="use-case">
+                    <h4>Administrar Usuarios</h4>
+                    <p>Gestión de perfiles, permisos y accesos al sistema con diferentes niveles.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa Conceptual -->
+        <div id="conceptual-map" class="diagram-container">
+            <h2 class="diagram-title">Mapa Conceptual del Sistema</h2>
+            
+            <div class="conceptual-map">
+                <div class="concept">
+                    <h3>Gobierno Digital</h3>
+                    <div class="concept-details">
+                        • Transformación digital del sector público<br>
+                        • Servicios centrados en el ciudadano<br>
+                        • Transparencia y eficiencia
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Inteligencia Artificial</h3>
+                    <div class="concept-details">
+                        • Análisis predictivo<br>
+                        • Chatbot conversacional<br>
+                        • Clasificación automática<br>
+                        • Toma de decisiones basada en datos
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Sistemas GIS</h3>
+                    <div class="concept-details">
+                        • Visualización espacial<br>
+                        • Análisis territorial<br>
+                        • Planificación geográfica<br>
+                        • Identificación de brechas
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Interoperabilidad</h3>
+                    <div class="concept-details">
+                        • Integración con DGII<br>
+                        • Conexión con TSS<br>
+                        • Enlace con ONAPI<br>
+                        • APIs RESTful
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Módulos del Sistema</h3>
+                    <div class="concept-details">
+                        • Registro de MIPYMES<br>
+                        • Geolocalización<br>
+                        • Comunicación virtual<br>
+                        • Inteligencia empresarial<br>
+                        • Evaluación y clasificación
+                    </div>
+                </div>
+                
+                <div class="concept">
+                    <h3>Arquitectura Tecnológica</h3>
+                    <div class="concept-details">
+                        • Cloud Computing<br>
+                        • Microservicios<br>
+                        • Bases de datos SQL/NoSQL<br>
+                        • Seguridad multicapa
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requisitos -->
+        <div id="requirements" class="diagram-container">
+            <h2 class="diagram-title">Requisitos del Sistema</h2>
+            
+            <div class="requirements-grid">
+                <div class="requirement-section">
+                    <h3>📋 Requisitos Funcionales</h3>
+                    
+                    <div class="requirement-item">
+                        <h4>RF-001: Registro de MIPYMES</h4>
+                        <p>El sistema debe permitir el registro digital de empresas con validación automática de datos y generación de expedientes electrónicos.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RF-002: Geolocalización</h4>
+                        <p>Debe implementar mapas interactivos para visualizar la distribución geográfica de MIPYMES por sector y tamaño.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RF-003: Chatbot con IA</h4>
+                        <p>Implementar asistente virtual para responder consultas frecuentes y brindar asesoría básica 24/7.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RF-004: Reportes y Dashboards</h4>
+                        <p>Generar reportes estadísticos, KPIs y dashboards sobre el ecosistema MIPYME con visualización de datos.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RF-005: Clasificación Automática</h4>
+                        <p>Evaluar y clasificar MIPYMES según criterios de madurez digital, ventas, empleados y productividad.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RF-006: Integración Externa</h4>
+                        <p>Conectar con sistemas de DGII, TSS, ONAPI y otras plataformas estatales para intercambio de datos.</p>
+                    </div>
+                </div>
+                
+                <div class="requirement-section">
+                    <h3>⚙️ Requisitos No Funcionales</h3>
+                    
+                    <div class="requirement-item">
+                        <h4>RNF-001: Disponibilidad</h4>
+                        <p>El sistema debe garantizar 99.5% de disponibilidad con tiempo de respuesta menor a 3 segundos.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RNF-002: Escalabilidad</h4>
+                        <p>Arquitectura de microservicios que soporte crecimiento horizontal y hasta 10,000 usuarios concurrentes.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RNF-003: Seguridad</h4>
+                        <p>Implementar cifrado de datos, autenticación de dos factores y cumplir estándares ISO 27001.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RNF-004: Usabilidad</h4>
+                        <p>Interfaz intuitiva con diseño responsivo compatible con dispositivos móviles y desktop.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RNF-005: Interoperabilidad</h4>
+                        <p>APIs RESTful compatibles con estándares de gobierno digital y protocolos de intercambio de datos.</p>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <h4>RNF-006: Mantenimiento</h4>
+                        <p>Código modular con documentación técnica completa y rutinas de respaldo automático.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diagramas de Secuencia -->
+        <div id="sequence" class="diagram-container">
+            <h2 class="diagram-title">Diagramas de Secuencia</h2>
+            
+            <div class="sequence-diagram">
+                <h3>Secuencia: Registro de MIPYME</h3>
+                <div class="sequence-steps">
+                    <div class="sequence-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Empresario → Sistema</div>
+                            <div class="step-description">Accede al formulario de registro en línea</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Sistema → Empresario</div>
+                            <div class="step-description">Presenta formulario de registro con campos obligatorios</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Empresario → Sistema</div>
+                            <div class="step-description">Completa y envía información de la empresa</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Sistema → DGII</div>
+                            <div class="step-description">Valida RNC y datos fiscales</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-title">DGII → Sistema</div>
+                            <div class="step-description">Confirma validación de datos</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-title">Sistema → Base de Datos</div>
+                            <div class="step-description">Almacena información y genera expediente</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <div class="step-title">Sistema → Empresario</div>
+                            <div class="step-description">Confirma registro exitoso y proporciona número de expediente</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sequence-diagram">
+                <h3>Secuencia: Consulta con Chatbot IA</h3>
+                <div class="sequence-steps">
+                    <div class="sequence-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Usuario → Chatbot</div>
+                            <div class="step-description">Inicia conversación con pregunta específica</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Chatbot → Procesador IA</div>
+                            <div class="step-description">Analiza intención y contexto de la consulta</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Procesador IA → Base Conocimiento</div>
+                            <div class="step-description">Busca información relevante en la base de conocimiento</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Base Conocimiento → Procesador IA</div>
+                            <div class="step-description">Retorna información encontrada</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-title">Procesador IA → Chatbot</div>
+                            <div class="step-description">Genera respuesta personalizada</div>
+                        </div>
+                    </div>
+                    <div class="sequence-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-title">Chatbot → Usuario</div>
+                            <div class="step-description">Proporciona respuesta y opciones adicionales</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diagrama de Flujo -->
+        <div id="flowchart" class="diagram-container">
+            <h2 class="diagram-title">Diagrama de Flujo - Implementación del Sistema</h2>
+            
+            <div class="flowchart">
+                <div class="flow-step">
+                    <div class="flow-icon">🚀</div>
+                    <div class="flow-content">
+                        <h4>Inicio del Proyecto</h4>
+                        <p>Definición de alcance, objetivos y formación del equipo de desarrollo</p>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">
+                    <div class="flow-icon">📋</div>
+                    <div class="flow-content">
+                        <h4>Análisis de Requisitos</h4>
+                        <p>Recolección detallada de requisitos funcionales y no funcionales</p>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">
+                    <div class="flow-icon">🏗️</div>
+                    <div class="flow-content">
+                        <h4>Diseño de Arquitectura</h4>
+                        <p>Definición de la arquitectura tecnológica y diseño de componentes</p>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">
+                    <div class="flow-icon">☁️</div>
+                    <div class="flow-content">
+                        <h4>Configuración de Infraestructura</h4>
+                        <p>Setup de servicios en la nube, bases de datos y entornos de desarrollo</p>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">
+                    <div class="flow-icon">💻</div>
+                    <div class="flow-content">
+                        <h4>Desarrollo de Módulos</h4>
+                        <p>Implementación iterativa de los módulos del sistema por sprints</p>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">
+                    <div class="flow-icon">🔗</div>
+                    <div class="flow-content">
+                        <h4>Integración de Sistemas</h4>
+                        <p>Conexión con DGII, TSS, ONAPI y otros sistemas externos</p>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">
+                    <div class="flow-icon">🧪</div>
+                    <div class="flow-content">
+                        <h4>Pruebas y Validación</h4>
+                        <p>Testing de funcionalidades, seguridad y rendimiento del sistema</p>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">
+                    <div class="flow-icon">👥</div>
+                    <div class="flow-content">
+                        <h4>Capacitación de Usuarios</h4>
+                        <p>Entrenamiento del personal y documentación para usuarios finales</p>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">
+                    <div class="flow-icon">🎯</div>
+                    <div class="flow-content">
+                        <h4>Puesta en Producción</h4>
+                        <p>Despliegue del sistema en ambiente productivo y migración de datos</p>
+                    </div>
+                </div>
+                
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-step">
+                    <div class="flow-icon">📊</div>
+                    <div class="flow-content">
+                        <h4>Monitoreo y Mejora Continua</h4>
+                        <p>Seguimiento de KPIs, mantenimiento y optimización constante</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modelo Entidad/Relación -->
+        <div id="er-diagram" class="diagram-container">
+            <h2 class="diagram-title">Modelo Entidad/Relación</h2>
+            
+            <div class="er-diagram">
+                <div class="entity">
+                    <h4>MIPYME</h4>
+                    <div class="entity-attributes">
+                        • id_mipyme (PK)<br>
+                        • rnc<br>
+                        • nombre_comercial<br>
+                        • razon_social<br>
+                        • sector_economico<br>
+                        • fecha_fundacion<br>
+                        • empleados_cantidad<br>
+                        • ventas_anuales<br>
+                        • nivel_formalizacion<br>
+                        • estado_registro<br>
+                        • fecha_registro
+                    </div>
+                </div>
+                
+                <div class="entity">
+                    <h4>UBICACION</h4>
+                    <div class="entity-attributes">
+                        • id_ubicacion (PK)<br>
+                        • id_mipyme (FK)<br>
+                        • direccion<br>
+                        • municipio<br>
+                        • provincia<br>
+                        • latitud<br>
+                        • longitud<br>
+                        • coordenadas_utm<br>
+                        • zona_geografica
+                    </div>
+                </div>
+                
+                <div class="entity">
+                    <h4>USUARIO</h4>
+                    <div class="entity-attributes">
+                        • id_usuario (PK)<br>
+                        • username<br>
+                        • email<br>
+                        • password_hash<br>
+                        • rol<br>
+                        • estado<br>
+                        • fecha_creacion<br>
+                        • ultimo_acceso<br>
+                        • intentos_fallidos
+                    </div>
+                </div>
+                
+                <div class="entity">
+                    <h4>EXPEDIENTE</h4>
+                    <div class="entity-attributes">
+                        • id_expediente (PK)<br>
+                        • id_mipyme (FK)<br>
+                        • numero_expediente<br>
+                        • estado_expediente<br>
+                        • fecha_apertura<br>
+                        • funcionario_asignado<br>
+                        • observaciones<br>
+                        • prioridad
+                    </div>
+                </div>
+                
+                <div class="entity">
+                    <h4>CLASIFICACION_IA</h4>
+                    <div class="entity-attributes">
+                        • id_clasificacion (PK)<br>
+                        • id_mipyme (FK)<br>
+                        • puntuacion_madurez<br>
+                        • categoria_empresa<br>
+                        • necesidades_identificadas<br>
+                        • recomendaciones<br>
+                        • fecha_evaluacion<br>
+                        • algoritmo_utilizado
+                    </div>
+                </div>
+                
+                <div class="entity">
+                    <h4>INTERACCION_CHATBOT</h4>
+                    <div class="entity-attributes">
+                        • id_interaccion (PK)<br>
+                        • id_usuario (FK)<br>
+                        • mensaje_usuario<br>
+                        • respuesta_chatbot<br>
+                        • timestamp<br>
+                        • sesion_id<br>
+                        • satisfaccion_usuario<br>
+                        • categoria_consulta
+                    </div>
+                </div>
+                
+                <div class="entity">
+                    <h4>REPORTE</h4>
+                    <div class="entity-attributes">
+                        • id_reporte (PK)<br>
+                        • titulo_reporte<br>
+                        • tipo_reporte<br>
+                        • fecha_generacion<br>
+                        • parametros_filtro<br>
+                        • usuario_generador<br>
+                        • formato_salida<br>
+                        • ruta_archivo
+                    </div>
+                </div>
+                
+                <div class="entity">
+                    <h4>INTEGRACION_EXTERNA</h4>
+                    <div class="entity-attributes">
+                        • id_integracion (PK)<br>
+                        • sistema_origen<br>
+                        • sistema_destino<br>
+                        • tipo_operacion<br>
+                        • timestamp<br>
+                        • estado_transaccion<br>
+                        • datos_intercambiados<br>
+                        • mensaje_respuesta
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Infraestructura -->
+        <div id="infrastructure" class="diagram-container">
+            <h2 class="diagram-title">Diagrama de Infraestructura</h2>
+            
+            <div class="architecture-diagram">
+                <div class="architecture-layer">
+                    <h4>🌐 Capa de Acceso y CDN</h4>
+                    <div class="layer-components">
+                        <div class="component">
+                            <h5>CloudFlare CDN</h5>
+                            <p>Distribución global de contenido y protección DDoS</p>
+                        </div>
+                        <div class="component">
+                            <h5>Load Balancer</h5>
+                            <p>Balanceador de carga con alta disponibilidad</p>
+                        </div>
+                        <div class="component">
+                            <h5>WAF</h5>
+                            <p>Web Application Firewall para seguridad</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="architecture-layer">
+                    <h4>☁️ Infraestructura Cloud (AWS/Azure)</h4>
+                    <div class="layer-components">
+                        <div class="component">
+                            <h5>Auto Scaling Groups</h5>
+                            <p>Escalado automático de instancias EC2</p>
+                        </div>
+                        <div class="component">
+                            <h5>Container Orchestration</h5>
+                            <p>Kubernetes/ECS para gestión de microservicios</p>
+                        </div>
+                        <div class="component">
+                            <h5>API Gateway</h5>
+                            <p>Gestión centralizada de APIs REST</p>
+                        </div>
+                        <div class="component">
+                            <h5>VPC & Subnets</h5>
+                            <p>Red privada virtual con subredes seguras</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="architecture-layer">
+                    <h4>💾 Capa de Datos y Almacenamiento</h4>
+                    <div class="layer-components">
+                        <div class="component">
+                            <h5>RDS PostgreSQL</h5>
+                            <p>Base de datos relacional para datos estructurados</p>
+                        </div>
+                        <div class="component">
+                            <h5>MongoDB Atlas</h5>
+                            <p>Base NoSQL para datos no estructurados</p>
+                        </div>
+                        <div class="component">
+                            <h5>Redis Cache</h5>
+                            <p>Cache en memoria para alta performance</p>
+                        </div>
+                        <div class="component">
+                            <h5>S3/Blob Storage</h5>
+                            <p>Almacenamiento de archivos y documentos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="architecture-layer">
+                    <h4>🔧 Servicios de Soporte</h4>
+                    <div class="layer-components">
+                        <div class="component">
+                            <h5>Monitoring</h5>
+                            <p>CloudWatch/Azure Monitor para observabilidad</p>
+                        </div>
+                        <div class="component">
+                            <h5>Backup & Recovery</h5>
+                            <p>Respaldos automáticos y recuperación ante desastres</p>
+                        </div>
+                        <div class="component">
+                            <h5>CI/CD Pipeline</h5>
+                            <p>GitLab/GitHub Actions para despliegue continuo</p>
+                        </div>
+                        <div class="component">
+                            <h5>Logs Centralizados</h5>
+                            <p>ELK Stack para análisis de logs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arquitectura -->
+        <div id="architecture" class="diagram-container">
+            <h2 class="diagram-title">Arquitectura del Sistema</h2>
+            
+            <div class="architecture-diagram">
+                <div class="architecture-layer">
+                    <h4>🎨 Capa de Presentación</h4>
+                    <div class="layer-components">
+                        <div class="component">
+                            <h5>Web App (React)</h5>
+                            <p>Aplicación web responsiva para funcionarios</p>
+                        </div>
+                        <div class="component">
+                            <h5>Mobile App (React Native)</h5>
+                            <p>Aplicación móvil para empresarios MIPYME</p>
+                        </div>
+                        <div class="component">
+                            <h5>Admin Dashboard</h5>
+                            <p>Panel administrativo con métricas y KPIs</p>
+                        </div>
+                        <div class="component">
+                            <h5>Chatbot Interface</h5>
+                            <p>Widget de chat con IA integrado</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="architecture-layer">
+                    <h4>⚙️ Capa de Lógica de Negocio (Microservicios)</h4>
+                    <div class="layer-components">
+                        <div class="component">
+                            <h5>User Management Service</h5>
+                            <p>Gestión de usuarios, autenticación y autorización</p>
+                        </div>
+                        <div class="component">
+                            <h5>MIPYME Registry Service</h5>
+                            <p>Registro y gestión de empresas MIPYME</p>
+                        </div>
+                        <div class="component">
+                            <h5>GIS Service</h5>
+                            <p>Servicios de geolocalización y mapas</p>
+                        </div>
+                        <div class="component">
+                            <h5>AI Classification Service</h5>
+                            <p>Algoritmos de IA para clasificación empresarial</p>
+                        </div>
+                        <div class="component">
+                            <h5>Chatbot Service</h5>
+                            <p>Procesamiento de lenguaje natural y conversación</p>
+                        </div>
+                        <div class="component">
+                            <h5>Analytics Service</h5>
+                            <p>Generación de reportes y análisis estadístico</p>
+                        </div>
+                        <div class="component">
+                            <h5>Integration Service</h5>
+                            <p>Conectores con sistemas externos (DGII, TSS, etc.)</p>
+                        </div>
+                        <div class="component">
+                            <h5>Notification Service</h5>
+                            <p>Gestión de notificaciones y comunicaciones</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="architecture-layer">
+                    <h4>🔄 Capa de Integración y Middleware</h4>
+                    <div class="layer-components">
+                        <div class="component">
+                            <h5>API Gateway</h5>
+                            <p>Punto de entrada único para todas las APIs</p>
+                        </div>
+                        <div class="component">
+                            <h5>Message Queue (RabbitMQ)</h5>
+                            <p>Cola de mensajes para comunicación asíncrona</p>
+                        </div>
+                        <div class="component">
+                            <h5>Event Bus</h5>
+                            <p>Arquitectura basada en eventos para desacoplamiento</p>
+                        </div>
+                        <div class="component">
+                            <h5>External APIs Proxy</h5>
+                            <p>Proxy para integración con servicios externos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="architecture-layer">
+                    <h4>🛡️ Capa de Seguridad Transversal</h4>
+                    <div class="layer-components">
+                        <div class="component">
+                            <h5>OAuth 2.0 + JWT</h5>
+                            <p>Autenticación y autorización basada en tokens</p>
+                        </div>
+                        <div class="component">
+                            <h5>Encryption Service</h5>
+                            <p>Cifrado de datos sensibles en tránsito y reposo</p>
+                        </div>
+                        <div class="component">
+                            <h5>Audit Log Service</h5>
+                            <p>Registro de todas las actividades del sistema</p>
+                        </div>
+                        <div class="component">
+                            <h5>Rate Limiting</h5>
+                            <p>Control de límites de uso y prevención de abuso</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDiagram(diagramId) {
+            // Ocultar todos los diagramas
+            const diagrams = document.querySelectorAll('.diagram-container');
+            diagrams.forEach(diagram => {
+                diagram.classList.remove('active');
+            });
+            
+            // Mostrar el diagrama seleccionado
+            document.getElementById(diagramId).classList.add('active');
+            
+            // Actualizar tabs activos
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Activar el tab actual
+            event.target.classList.add('active');
+        }
+        
+        // Animaciones y efectos adicionales
+        document.addEventListener('DOMContentLoaded', function() {
+            // Agregar efecto de hover a los componentes
+            const components = document.querySelectorAll('.component, .use-case, .concept, .entity');
+            components.forEach(component => {
+                component.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                    this.style.transition = 'all 0.3s ease';
+                });
+                
+                component.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Efecto de carga progresiva
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.diagram-container').forEach(diagram => {
+                diagram.style.opacity = '0';
+                diagram.style.transform = 'translateY(20px)';
+                diagram.style.transition = 'all 0.6s ease';
+                observer.observe(diagram);
+            });
+        });
+    </script>
+</body>
+</html>
